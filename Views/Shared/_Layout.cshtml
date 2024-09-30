@@ -27,25 +27,42 @@
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-area="" asp-controller="Products" asp-action="Index">Products</a>
                         </li>
-                        <li class="nav-item">
+
+@*                         <li class="nav-item">
                             <a class="nav-link text-light" asp-area="" asp-controller="Customers" asp-action="Index">Customers</a>
-                        </li>
+                        </li> *@
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-area="" asp-controller="Order" asp-action="Index">Orders</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-area="" asp-controller="Files" asp-action="Index">Files</a>
                         </li>
-                      
                     </ul>
-                    <form class="d-flex">
-                        <input class="form-control me-sm-2" type="search" placeholder="">
-                        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+
+                    <form class="d-flex me-2">
+                        <input class="form-control me-2" type="search" placeholder="Search">
+                        <button class="btn btn-secondary" type="submit">Search</button>
                     </form>
+
+                    <div class="d-flex">
+                        @if (Context.Session.GetString("UserEmail") == null)
+
+                        {
+                            <a class="btn btn-outline-light me-2" asp-controller="Customers" asp-action="Login">Login</a>
+                            <a class="btn btn-outline-light" asp-controller="Customers" asp-action="Register">Register</a>
+                        }
+
+                        else
+
+                        {
+                            <a class="btn btn-outline-light" asp-controller="Customers" asp-action="Logout">Logout</a>
+                        }
+                    </div>
                 </div>
             </div>
         </nav>
     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -54,7 +71,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-           ABC Retail <a asp-area="" asp-controller="Home" asp-action="AboutUs">--About Us</a>
+            ABC Retail <a asp-area="" asp-controller="Home" asp-action="AboutUs">--About Us</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -63,4 +80,3 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
-@* https://bootswatch.com/ *@

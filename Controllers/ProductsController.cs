@@ -55,7 +55,6 @@ public class ProductsController : Controller
                 formData.Add(fileContent, "file", file.FileName);
             }
 
-            // Send the data to the Azure Function using HttpClient
             var response = await _httpClient.PostAsync("http://localhost:7110/api/AddProduct", formData);
 
             if (response.IsSuccessStatusCode)
