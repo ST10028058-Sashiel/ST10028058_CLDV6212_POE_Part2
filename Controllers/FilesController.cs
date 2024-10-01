@@ -55,7 +55,7 @@ public class FilesController : Controller
                 fileContent.Headers.ContentType = new MediaTypeHeaderValue(file.ContentType);
                 content.Add(fileContent, "file", file.FileName);
 
-                // Replace with your Azure Function URL
+                // Hard-coded Azure Function URL for file uploads
                 var functionUrl = "https://st10028058-fileshare.azurewebsites.net/";
 
                 var response = await _httpClient.PostAsync(functionUrl, content);
@@ -104,3 +104,4 @@ public class FilesController : Controller
         }
     }
 }
+
