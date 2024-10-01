@@ -5,8 +5,8 @@ namespace ST10028058_CLDV6212_POE.Models
     public class FileModel
     {
         public string Name { get; set; }
-        public long Size { get; set; }
-        public DateTimeOffset? LastModified { get; set; }
+        public long Size { get; set; } // Add the Size property
+        public DateTimeOffset? LastModified { get; set; } // Add the LastModified property
 
         public string DisplaySize
         {
@@ -20,6 +20,7 @@ namespace ST10028058_CLDV6212_POE.Models
             }
         }
     }
+
 }
 //# Assistance provided by ChatGPT
 //# Code and support generated with the help of OpenAI's ChatGPT.

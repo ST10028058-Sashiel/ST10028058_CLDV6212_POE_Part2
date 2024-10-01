@@ -5,7 +5,7 @@ VisualStudioVersion = 17.11.35219.272
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ST10028058_CLDV6212_POE", "ST10028058_CLDV6212_POE.csproj", "{251E770D-B4F2-4645-8012-9B12AACAB4F9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Azure_Storage_Functions", "..\Azure_Storage_Functions\Azure_Storage_Functions.csproj", "{E8E2B338-D7FD-450C-A093-7CC752814405}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Azure_Storage_Functions", "..\Azure_Storage_Functions\Azure_Storage_Functions.csproj", "{E8E2B338-D7FD-450C-A093-7CC752814405}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

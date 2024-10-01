@@ -101,8 +101,7 @@ public class AzureFileShareService
     }
 }
 
-//# Assistance provided by ChatGPT
-//# Code and support generated with the help of OpenAI's ChatGPT.
+
 //# Assistance provided by ChatGPT
 //# Code and support generated with the help of OpenAI's ChatGPT.
 // code attribution
