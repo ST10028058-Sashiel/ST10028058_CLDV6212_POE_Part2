@@ -1,95 +1,84 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ST10028058_CLDV6212_POE.Models;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Microsoft.Extensions.Logging;
-using ST10028058_CLDV6212_POE.Models;
+using System;
 
 public class FilesController : Controller
 {
     private readonly HttpClient _httpClient;
-    private readonly ILogger<FilesController> _logger;
+    private readonly AzureFileShareService _fileShareService;
 
-    public FilesController(HttpClient httpClient, ILogger<FilesController> logger)
+    public FilesController(HttpClient httpClient, AzureFileShareService fileShareService)
     {
         _httpClient = httpClient;
-        _logger = logger;
+        _fileShareService = fileShareService;
     }
 
-    // Display the list of files
+    // List files in the "uploads" directory
     public async Task<IActionResult> Index()
     {
-        List<FileModel> files = new List<FileModel>();
-
+        List<FileModel> files;
         try
         {
-            var response = await _httpClient.GetAsync("http://localhost:7110/api/FileShare");
-            if (response.IsSuccessStatusCode)
-            {
-                var json = await response.Content.ReadAsStringAsync();
-                files = JsonConvert.DeserializeObject<List<FileModel>>(json);
-                _logger.LogInformation("File list successfully retrieved.");
-            }
-            else
-            {
-                ViewBag.Message = "Failed to load files.";
-                _logger.LogError($"Failed to retrieve file list. Status code: {response.StatusCode}");
-            }
+            files = await _fileShareService.ListFilesAsync("uploads");
         }
-        catch (HttpRequestException ex)
+        catch (Exception ex)
         {
-            ViewBag.Message = $"Error retrieving files: {ex.Message}";
-            _logger.LogError($"Error retrieving files: {ex.Message}");
+            ViewBag.Message = $"Failed to load files: {ex.Message}";
+            files = new List<FileModel>();
         }
 
         return View(files);
     }
 
-    // Handle file upload
+    // Upload file using the Azure Function
     [HttpPost]
     public async Task<IActionResult> Upload(IFormFile file)
     {
         if (file == null || file.Length == 0)
         {
             ModelState.AddModelError("file", "Please select a file to upload.");
-            return await Index();
+            return RedirectToAction("Index");
         }
 
         try
         {
-            using (var content = new MultipartFormDataContent())
+            // Upload the file via Azure Function
+            using (var stream = file.OpenReadStream())
             {
-                var fileContent = new StreamContent(file.OpenReadStream());
+                var content = new MultipartFormDataContent();
+                var fileContent = new StreamContent(stream);
                 fileContent.Headers.ContentType = new MediaTypeHeaderValue(file.ContentType);
                 content.Add(fileContent, "file", file.FileName);
 
-                var response = await _httpClient.PostAsync("http://localhost:7110/api/FileShare", content);
+                // Replace with your Azure Function URL
+                var functionUrl = "https://st10028058-fileshare.azurewebsites.net/";
+
+                var response = await _httpClient.PostAsync(functionUrl, content);
 
                 if (response.IsSuccessStatusCode)
                 {
                     TempData["Message"] = $"File '{file.FileName}' uploaded successfully!";
-                    _logger.LogInformation($"File '{file.FileName}' uploaded successfully.");
                 }
                 else
                 {
                     TempData["Message"] = $"File upload failed: {response.ReasonPhrase}";
-                    _logger.LogError($"File upload failed. Status code: {response.StatusCode}, Reason: {response.ReasonPhrase}");
                 }
             }
         }
-        catch (HttpRequestException ex)
+        catch (Exception ex)
         {
             TempData["Message"] = $"File upload failed: {ex.Message}";
-            _logger.LogError($"Error uploading file: {ex.Message}");
         }
 
         return RedirectToAction("Index");
     }
 
-    // Download file by fileName
+    // Handle file download using AzureFileShareService
     [HttpGet]
     public async Task<IActionResult> DownloadFile(string fileName)
     {
@@ -100,27 +89,18 @@ public class FilesController : Controller
 
         try
         {
-            var response = await _httpClient.GetAsync($"http://localhost:7110/api/FileShare/{fileName}");
+            var fileStream = await _fileShareService.DownloadFileAsync("uploads", fileName);
 
-            if (response.IsSuccessStatusCode)
+            if (fileStream == null)
             {
-                var fileStream = await response.Content.ReadAsStreamAsync();
-                _logger.LogInformation($"File '{fileName}' downloaded successfully.");
-                return File(fileStream, "application/octet-stream", fileName);
-            }
-            else
-            {
-                _logger.LogError($"File '{fileName}' not found. Status code: {response.StatusCode}");
                 return NotFound($"File '{fileName}' not found.");
             }
+
+            return File(fileStream, "application/octet-stream", fileName);
         }
-        catch (HttpRequestException ex)
+        catch (Exception ex)
         {
-            _logger.LogError($"Error downloading file: {ex.Message}");
             return BadRequest($"Error downloading file: {ex.Message}");
         }
     }
 }
-
-// FileModel class to match the Azure Function output
-

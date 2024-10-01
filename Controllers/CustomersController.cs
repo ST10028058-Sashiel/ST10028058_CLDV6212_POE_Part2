@@ -10,7 +10,7 @@ public class CustomersController : Controller
 {
     private readonly TableStorageService _tableStorageService;
     private readonly HttpClient _httpClient;
-    private readonly string _azureFunctionUrl = "http://localhost:7110/api/AddCustomer";  // Replace with actual Function URL if deployed
+    private readonly string _azureFunctionUrl = "https://st10028058-function-app.azurewebsites.net/";  
 
     public CustomersController(TableStorageService tableStorageService, HttpClient httpClient)
     {

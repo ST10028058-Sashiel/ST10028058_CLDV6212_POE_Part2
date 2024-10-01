@@ -71,7 +71,7 @@ namespace ST10028058_CLDV6212_Part1.Controllers
                 var orderJson = JsonConvert.SerializeObject(order);
                 var content = new StringContent(orderJson, System.Text.Encoding.UTF8, "application/json");
 
-                HttpResponseMessage response = await _httpClient.PostAsync("http://localhost:7110/api/AddOrder", content);
+                HttpResponseMessage response = await _httpClient.PostAsync("https://st10028058-function-app.azurewebsites.net/", content);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -134,7 +134,7 @@ namespace ST10028058_CLDV6212_Part1.Controllers
             string message = $"Order with ID {order.Order_Id}, Customer {order.CustomerName}, Product {order.ProductName} has been deleted.";
             var content = new StringContent(JsonConvert.SerializeObject(message), System.Text.Encoding.UTF8, "application/json");
 
-            HttpResponseMessage response = await _httpClient.PostAsync("http://localhost:7110/api/AddOrder", content);
+            HttpResponseMessage response = await _httpClient.PostAsync("https://st10028058-function-app.azurewebsites.net/", content);
 
             if (!response.IsSuccessStatusCode)
             {

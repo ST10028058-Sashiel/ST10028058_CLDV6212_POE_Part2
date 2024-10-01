@@ -1,12 +1,12 @@
-﻿@model List<ST10028058_CLDV6212_POE.Models.FileModel>
+﻿
 
-<h1 class="mb-4 text-center">Upload Files</h1>
+<h1 class="mb-4">Upload Files</h1>
 
 <!-- Display any messages -->
 @if (TempData["Message"] != null)
 
 {
-    <div class="alert alert-info text-center">
+    <div class="alert alert-info">
         @TempData["Message"]
     </div>
 }
@@ -23,7 +23,7 @@
 @if (Model != null && Model.Count > 0)
 
 {
-    <div class="list-group shadow-sm">
+    <div class="list-group">
         @foreach (var file in Model)
 
         {
@@ -41,49 +41,5 @@
 else
 
 {
-    <p class="text-muted text-center">No files found or model is null.</p>
+    <p class="text-muted">No files found or model is null.</p>
 }
-
-<style>
-    body {
-        background-color: #f8f9fa;
-    }
-
-    .input-group {
-        max-width: 500px;
-        margin: 0 auto;
-    }
-
-    .list-group {
-        max-width: 800px;
-        margin: 20px auto;
-        border-radius: 8px;
-        overflow: hidden;
-    }
-
-    .list-group-item {
-        border: 1px solid #dee2e6;
-        border-radius: 8px;
-        margin-bottom: 10px;
-        padding: 15px;
-        transition: background-color 0.3s ease;
-    }
-
-        .list-group-item:hover {
-            background-color: #f1f3f5;
-        }
-
-    .btn-primary {
-        background-color: #007bff;
-        border-color: #007bff;
-    }
-
-        .btn-primary:hover {
-            background-color: #0056b3;
-            border-color: #004085;
-        }
-
-    .btn-outline-secondary {
-        border-radius: 5px;
-    }
-</style>

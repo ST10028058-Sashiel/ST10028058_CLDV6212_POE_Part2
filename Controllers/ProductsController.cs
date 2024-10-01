@@ -55,7 +55,7 @@ public class ProductsController : Controller
                 formData.Add(fileContent, "file", file.FileName);
             }
 
-            var response = await _httpClient.PostAsync("http://localhost:7110/api/AddProduct", formData);
+            var response = await _httpClient.PostAsync("https://st10028058-function-app.azurewebsites.net/", formData);
 
             if (response.IsSuccessStatusCode)
             {
