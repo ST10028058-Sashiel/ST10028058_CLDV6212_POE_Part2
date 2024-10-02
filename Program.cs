@@ -33,13 +33,13 @@ builder.Services.AddSingleton<AzureFileShareService>(sp =>
     return new AzureFileShareService(connectionString, "uploads");
 });
 
-// Add session services
-//builder.Services.AddSession(options =>
-//{
-//    options.IdleTimeout = TimeSpan.FromMinutes(30); // Session timeout
-//    options.Cookie.HttpOnly = true; // Protect against XSS
-//    options.Cookie.IsEssential = true; // Mark the cookie as essential for session management
-//});
+//Add session services
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Session timeout
+options.Cookie.HttpOnly = true; // Protect against XSS
+options.Cookie.IsEssential = true; // Mark the cookie as essential for session management
+});
 
 var app = builder.Build();
 
